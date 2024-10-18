@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class CubeManager : MonoBehaviour
 {
+    public GameObject cube;
+
+    [SerializeField] private Vector3 currentAngle;
+    public Vector3 targetAngle;
+
+    public bool isRotating = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -12,31 +19,55 @@ public class CubeManager : MonoBehaviour
         Events.current.onCubeRotateUp += OnCubeRotateUp;
         Events.current.onCubeRotateDown += OnCubeRotateDown;
 
-    }
+        cube = this.gameObject;
 
-    private void OnCubeRotateLeft()
-    {
-        //cube is rotated left
-    }
-
-    private void OnCubeRotateRight()
-    {
-        //cube is ro
-    }
-
-    private void OnCubeRotateUp()
-    {
-
-    }
-
-    private void OnCubeRotateDown()
-    {
-
+        currentAngle = transform.eulerAngles;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isRotating)
+        {
+            currentAngle = new Vector3(
+            Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime),
+            Mathf.LerpAngle(currentAngle.y, targetAngle.y, Time.deltaTime),
+            Mathf.LerpAngle(currentAngle.z, targetAngle.z, Time.deltaTime));
+
+            if (currentAngle == targetAngle )
+            {
+                isRotating = false;
+            }
+
+            cube.transform.eulerAngles = currentAngle;
+        } 
+
         
     }
+    private void OnCubeRotateLeft()
+    {
+        Debug.Log("Cube is rotated left");
+
+        targetAngle = new Vector3(currentAngle.x, (currentAngle.y + 90), currentAngle.z);
+
+        isRotating = true;
+    }
+
+    private void OnCubeRotateRight()
+    {
+        //cube is rotated right
+
+    }
+
+    private void OnCubeRotateUp()
+    {
+        //cube is rotated up
+    }
+
+    private void OnCubeRotateDown()
+    {
+        //cube is rotated down
+    }
+
+    
 }
