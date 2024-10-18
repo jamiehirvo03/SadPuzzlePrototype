@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,9 +8,11 @@ public class CubeManager : MonoBehaviour
     public GameObject cube;
 
     [SerializeField] private Vector3 currentAngle;
-    public Vector3 targetAngle;
+    [SerializeField] private Vector3 targetAngle;
 
     public bool isRotating = false;
+
+    public float rotationTime;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +24,8 @@ public class CubeManager : MonoBehaviour
 
         cube = this.gameObject;
 
+        rotationTime = 1f;
+
         currentAngle = transform.eulerAngles;
     }
 
@@ -30,19 +35,17 @@ public class CubeManager : MonoBehaviour
         if (isRotating)
         {
             currentAngle = new Vector3(
-            Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime),
-            Mathf.LerpAngle(currentAngle.y, targetAngle.y, Time.deltaTime),
-            Mathf.LerpAngle(currentAngle.z, targetAngle.z, Time.deltaTime));
+            Mathf.LerpAngle(currentAngle.x, targetAngle.x, rotationTime * Time.deltaTime),
+            Mathf.LerpAngle(currentAngle.y, targetAngle.y, rotationTime * Time.deltaTime),
+            Mathf.LerpAngle(currentAngle.z, targetAngle.z, rotationTime * Time.deltaTime));
 
-            if (currentAngle == targetAngle )
+            if (currentAngle == targetAngle)
             {
                 isRotating = false;
             }
 
             cube.transform.eulerAngles = currentAngle;
         } 
-
-        
     }
     private void OnCubeRotateLeft()
     {
@@ -56,17 +59,31 @@ public class CubeManager : MonoBehaviour
     private void OnCubeRotateRight()
     {
         //cube is rotated right
+        Debug.Log("Cube is rotated right");
 
+        targetAngle = new Vector3(currentAngle.x, (currentAngle.y - 90), currentAngle.z);
+
+        isRotating = true;
     }
 
     private void OnCubeRotateUp()
     {
         //cube is rotated up
+        Debug.Log("Cube is rotated up");
+
+        targetAngle = new Vector3((currentAngle.x + 90), currentAngle.y, currentAngle.z);
+
+        isRotating = true;
     }
 
     private void OnCubeRotateDown()
     {
         //cube is rotated down
+        Debug.Log("Cube is rotated down");
+
+        targetAngle = new Vector3((currentAngle.x - 90), currentAngle.y, currentAngle.z);
+
+        isRotating = true;
     }
 
     
