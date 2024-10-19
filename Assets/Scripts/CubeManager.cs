@@ -12,6 +12,7 @@ public class CubeManager : MonoBehaviour
 
     public bool isRotating = false;
 
+    public float rotationSpeed;
     public float rotationTime;
 
     // Start is called before the first frame update
@@ -24,6 +25,7 @@ public class CubeManager : MonoBehaviour
 
         cube = this.gameObject;
 
+        rotationSpeed = 5f;
         rotationTime = 1f;
 
         currentAngle = transform.eulerAngles;
@@ -35,9 +37,9 @@ public class CubeManager : MonoBehaviour
         if (isRotating)
         {
             currentAngle = new Vector3(
-            Mathf.LerpAngle(currentAngle.x, targetAngle.x, rotationTime * Time.deltaTime),
-            Mathf.LerpAngle(currentAngle.y, targetAngle.y, rotationTime * Time.deltaTime),
-            Mathf.LerpAngle(currentAngle.z, targetAngle.z, rotationTime * Time.deltaTime));
+            Mathf.LerpAngle(currentAngle.x, targetAngle.x, (float)(1 - Math.Exp(-rotationSpeed * rotationTime))),
+            Mathf.LerpAngle(currentAngle.y, targetAngle.y, (float)(1 - Math.Exp(-rotationSpeed * rotationTime))),
+            Mathf.LerpAngle(currentAngle.z, targetAngle.z, (float)(1 - Math.Exp(-rotationSpeed * rotationTime))));
 
             if (currentAngle == targetAngle)
             {
